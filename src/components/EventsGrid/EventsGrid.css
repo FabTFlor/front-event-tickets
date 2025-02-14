@@ -1,0 +1,116 @@
+/* src/components/EventsGrid/EventsGrid.css */
+
+:root {
+    --purple: #8000ff;
+    --orange: #ff6b00;
+    --white: #ffffff;
+    --dark-bg: #0a0a0a;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(10px);
+  }
+  
+  .events-grid {
+    padding: 5rem 10%;
+    text-align: center;
+    background: var(--dark-bg);
+    color: var(--white);
+  }
+  
+  .events-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+  }
+  
+  /* 🔥 Evento Principal (Grande) */
+  .featured-event {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.featured-event.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+  
+.featured-event .event-card {
+  width: 100%;
+  max-width: 875px;
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+  
+.featured-event .event-card:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 40px rgba(255, 107, 0, 0.7);
+}
+  
+  /* 🎟️ Otros eventos en fila */
+  .secondary-events {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .secondary-events .event-card {
+    flex: 1;
+    max-width: 300px;
+    border: 2px solid var(--purple);
+    box-shadow: 0px 0px 15px rgba(128, 0, 255, 0.4); /* 🔥 Glow sutil en morado */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .secondary-events .event-card:hover {
+    box-shadow: 0px 0px 25px rgba(128, 0, 255, 0.7); /* ✨ Glow más fuerte al pasar el mouse */
+    transform: translateY(-5px);
+}
+  
+  /* 🚀 Botón "Ver Más Eventos" */
+  .view-more-btn {
+    margin-top: 3rem;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--white);
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .view-more-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 5px 15px rgba(128, 0, 255, 0.3);
+  }
+
+  .featured-image {
+    height: 350px;
+  }
+
+  /* 📱 Responsividad */
+  @media (max-width: 768px) {
+    .events-grid {
+      padding: 3rem 5%;
+    }
+  
+    .events-title {
+      font-size: 2rem;
+    }
+  
+  
+    .view-more-btn {
+      font-size: 0.9rem;
+    }
+  }
+  

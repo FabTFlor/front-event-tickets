@@ -1,0 +1,197 @@
+/* 🎨 Estilos base del Login */
+.login-content {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+  }
+
+  /* 🔹 Login y Registro en el mismo espacio */
+.auth-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .login-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    background-clip: text; /* Propiedad estándar */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* 📌 Formulario */
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* 🔹 Inputs */
+  .input-group {
+    position: relative;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .login-input:focus {
+    outline: none;
+    border-color: var(--purple);
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+  }
+  
+  .login-input:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* 🟠 Botón de Login */
+  .login-button {
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    color: var(--white);
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .login-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+  
+  /* 🔄 Efecto de Cargando en el Botón */
+  .login-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* ❌ Mensaje de error */
+  .error-message {
+    color: var(--orange);
+    font-size: 0.9rem;
+    margin-top: -10px;
+  }
+  
+  /* 🔹 Olvidé mi contraseña */
+  .forgot-password {
+    margin-top: 1rem;
+  }
+  
+  .forgot-password a {
+    color: var(--purple);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .forgot-password a:hover {
+    color: var(--orange);
+  }
+  
+  /* 🌟 Animación sutil en la entrada del Login */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .login-content {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+  }
+  
+/* 🔹 Fondo Oscuro y Desenfocado */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* 🔹 Fondo oscuro */
+    backdrop-filter: blur(10px); /* 🎭 Aplica desenfoque */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* 🏠 Modal de Login */
+  .login-modal {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(128, 0, 255, 0.2);
+  }
+  
+  /* ✖️ Botón de Cerrar */
+  .close-login {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .close-login:hover {
+    opacity: 0.6;
+  }
+  
+  /* 🎭 Efecto de entrada */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .login-modal {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* 📱 Responsivo */
+  @media (max-width: 768px) {
+    .login-title {
+      font-size: 1.8rem;
+    }
+    .login-input {
+      padding: 0.8rem;
+    }
+
+    
+  }
+  
+  @media (max-width: 768px) {
+    .login-modal {
+      padding: 2rem;
+    }
+  }

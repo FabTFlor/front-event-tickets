@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;700&display=swap');
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: white;
+  cursor: none; /* 🔹 Oculta el cursor del sistema */
+
+}
+
+a, button, input, textarea {
+  cursor: none !important; /* 🔹 Evita la mano del sistema en elementos interactivos */
+}
+
+h1, h2, h3 {
+  font-family: "Orbitron", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button, p, a {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+

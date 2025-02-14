@@ -1,0 +1,81 @@
+/* src/components/Hero/Hero.css */
+
+:root {
+    --purple: #8000ff;
+    --orange: #ff6b00;
+    --white: #ffffff;
+    --dark-bg: #0a0a0a;
+  }
+  
+  .hero-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/assets/hero-background.webp") center/cover no-repeat;
+    background-color: rgba(15, 15, 15, 0.8);
+    background-blend-mode: soft-light;
+    filter: grayscale(70%) contrast(125%);
+    z-index: -1; /* Esto manda la imagen detrás de todo */
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2; /* Esto asegura que el texto esté por encima del fondo */
+    text-align: center;
+  }
+  
+  .hero-title {
+    font-family: "Orbitron", sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 4rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--white);
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: moveParticles linear infinite;
+  }
+  
+  @keyframes moveParticles {
+    0% { transform: translateY(-35vh); opacity: 0.5; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+  

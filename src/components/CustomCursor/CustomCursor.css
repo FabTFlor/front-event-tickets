@@ -1,0 +1,68 @@
+/* 🔹 Oculta el cursor predeterminado */
+body {
+    cursor: none;
+  }
+  
+  /* 🎯 Cursor externo - Anillo translúcido */
+  .cursor-outer {
+    position: fixed;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #ff6a0090;
+    border-radius: 90%;
+    backdrop-filter: blur(1px);
+    pointer-events: none;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    mix-blend-mode: difference;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    animation: cursorFadeIn 0.5s ease-out;
+  }
+  
+  /* 🎯 Cursor interno - Punto sólido */
+  .cursor-inner {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: #ff6a007c;
+    border-radius: 50%;
+    pointer-events: none;
+    transition: background 0.3s ease;
+    mix-blend-mode: difference;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    animation: cursorFadeIn 0.5s ease-out;
+  }
+  
+  /* ✨ Animación de entrada */
+  @keyframes cursorFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* 🎨 Hover sobre enlaces y botones - SOLO CAMBIA DE COLOR */
+  .cursor-outer.hovered {
+    border-color: rgba(128, 0, 255, 1); /* Morado cuando pasa sobre links */
+    background: rgba(128, 0, 255, 0.1); /* Sutil relleno */
+  }
+  
+  .cursor-inner.hovered {
+    background: rgba(128, 0, 255, 1); /* Morado sólido */
+  }
+  
+  /* ✏️ Modo Input/Text - SOLO CAMBIA DE COLOR */
+  .cursor-outer.text-mode {
+    border-color: rgba(255, 107, 0, 1); /* Naranja en inputs */
+    background: rgba(255, 107, 0, 0.1);
+  }
+  
+  .cursor-inner.text-mode {
+    background: rgba(255, 107, 0, 1);
+  }
+  
