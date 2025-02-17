@@ -24,7 +24,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
   
   /* 🔥 Evento Principal (Grande) */
@@ -35,6 +35,7 @@
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+
 }
 
 .featured-event.fade-in {
@@ -43,6 +44,11 @@
 }
   
 .featured-event .event-card {
+  max-height: 70vh;
+  overflow: hidden;  /* Oculta el contenido que se sale */
+  display: flex;  /* Para alinear elementos */
+  align-items: center;  /* Asegura que lo que se oculta sea la parte superior */
+  position: relative; /* Control de la posición */
   width: 100%;
   max-width: 875px;
   transform: scale(1.1);
@@ -95,7 +101,7 @@
   }
 
   .featured-image {
-    height: 350px;
+    height: 375px;
   }
 
   /* 📱 Responsividad */

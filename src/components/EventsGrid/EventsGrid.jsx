@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetchEvents from "../../hooks/useFetchEvents";
+import { useFetchEvents } from "../../hooks/useFetchEvents";
 import EventCard from "../EventCard/EventCard";
 import "./EventsGrid.css";
 
-const EventsGrid = () => {
+const EventsGrid = ({ onEventClick }) => {
   const [isFeaturedVisible, setIsFeaturedVisible] = useState(false);
   const featuredRef = useRef(null);
   const { data, isLoading, isError } = useFetchEvents();
@@ -45,13 +45,13 @@ const EventsGrid = () => {
           ref={featuredRef}
           className={`featured-event ${isFeaturedVisible ? "fade-in" : ""}`}
         >
-          <EventCard event={events[0]} isFeatured={true} />
+          <EventCard event={events[0]} isFeatured={true} onViewMore={() => onEventClick(events[0].id)} />
         </div>
       )}
 
       <div className="secondary-events">
         {events.slice(1, 4).map((event) => (
-          <EventCard key={event.id} event={event} isFeatured={false} />
+          <EventCard key={event.id} event={event} isFeatured={false} onViewMore={() => onEventClick(event.id)} />
         ))}
       </div>
 

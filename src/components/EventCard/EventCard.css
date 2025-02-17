@@ -36,13 +36,13 @@
     height: 180px;
     object-fit: cover;
     border-top-left-radius: 15px; /* 🔹 Solo redondea la parte superior */
-    border-top-right-radius: 15px;
+    border-top-right-radius: 5px;
     transition: transform 0.3s ease;
     
 }
 
 .event-card:hover .event-image {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 /* 📌 Contenedor del contenido */

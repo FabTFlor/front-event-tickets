@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./EventCard.css";
 
-const EventCard = ({ event, isFeatured }) => {
+const EventCard = ({ event, isFeatured, onViewMore }) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef(null);
 
@@ -37,7 +37,10 @@ const EventCard = ({ event, isFeatured }) => {
           <p className="event-location">{event.location}</p>
           <p className="event-price">{event.price}</p>
         </div>
-        <button className="event-button">Comprar Entrada</button>
+        {/* 🔹 Ahora el botón activa el modal con el evento correspondiente */}
+        <button className="event-button" onClick={() => onViewMore(event.id)}>
+          Ver Entradas
+        </button>
       </div>
     </div>
   );

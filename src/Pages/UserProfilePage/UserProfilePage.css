@@ -1,0 +1,137 @@
+/* 🎨 Contenedor principal del perfil */
+.user-profile-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.2);
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+    
+}
+
+/* 🔹 Información del usuario */
+.user-profile-info {
+    margin-bottom: 20px;
+}
+
+.user-profile-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.user-profile-role {
+    font-size: 1rem;
+    color: #ff6a00;
+    margin-bottom: 10px;
+}
+
+.user-profile-email,
+.user-profile-date {
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+/* 🏷 Botones */
+.user-profile-tickets-btn,
+.user-profile-settings-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+.user-profile-tickets-btn:hover,
+.user-profile-settings-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* 🎟 Sección de tickets */
+.user-tickets-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+}
+
+.user-tickets-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.user-ticket-item {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-ticket-item:last-child {
+    border-bottom: none;
+}
+
+.user-no-tickets {
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+/* ⚙️ Sección de configuración */
+.user-settings-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+}
+
+.user-settings-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.user-settings-btn {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.user-settings-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.logout {
+    background: #ff4444;
+    color: white;
+}
+
+.logout:hover {
+    background: #cc0000;
+}
+
+/* ✨ Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
