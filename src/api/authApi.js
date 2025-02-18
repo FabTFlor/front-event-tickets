@@ -6,7 +6,7 @@ const API_URL = "http://localhost:8080/auth";
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/register`, userData);
-    saveAuthToken(response.data.access_token);
+    saveAuthTokens(response.data.access_token, response.data.refresh_token);
     return response.data;
   } catch (error) {
     handleApiError(error, "Error en el registro");
@@ -18,7 +18,7 @@ export const registerUser = async (userData) => {
 export const loginUser = async (credentials) => {
   try {
     const response = await axios.post(`${API_URL}/login`, credentials);
-    saveAuthToken(response.data.access_token);
+    saveAuthTokens(response.data.access_token, response.data.refresh_token);
     return response.data;
   } catch (error) {
     handleApiError(error, "Error en el inicio de sesión");
@@ -26,39 +26,48 @@ export const loginUser = async (credentials) => {
   }
 };
 
-// 🔹 Obtener datos del usuario autenticado
-export const getUserData = async () => {
+// 🔹 Renueva el token de acceso si está expirado
+export const refreshAuthToken = async () => {
   try {
-    const token = getAuthToken();
-    if (!token) throw new Error("No hay token disponible");
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) {
+      console.warn("⚠️ No hay refresh token disponible. Cierre de sesión forzado.");
+      logoutUser();
+      return null;
+    }
 
-    const response = await axios.get(`${API_URL}/me`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await axios.post(`${API_URL}/refresh`, null, {
+      headers: { Authorization: `Bearer ${refreshToken}` },
     });
 
-    return response.data;
+    saveAuthTokens(response.data.access_token, response.data.refresh_token);
+    return response.data.access_token;
   } catch (error) {
-    handleApiError(error, "Error obteniendo usuario");
-    throw error;
+    console.warn("❌ Error al refrescar el token, cerrando sesión...");
+    logoutUser();
+    return null;
   }
 };
 
-// 🔹 Guardar token en localStorage
-const saveAuthToken = (token) => {
-  localStorage.setItem("access_token", token);
+// 🔹 Guardar tokens en localStorage (o sessionStorage si se prefiere mayor seguridad)
+export const saveAuthTokens = (accessToken, refreshToken) => {
+  if (accessToken) localStorage.setItem("access_token", accessToken);
+  if (refreshToken) localStorage.setItem("refresh_token", refreshToken);
 };
 
-// 🔹 Obtener el token guardado
-export const getAuthToken = () => {
-  return localStorage.getItem("access_token");
-};
+// 🔹 Obtener el access_token guardado
+export const getAuthToken = () => localStorage.getItem("access_token") || null;
 
-// 🔹 Eliminar token al cerrar sesión
+// 🔹 Obtener el refresh_token guardado
+export const getRefreshToken = () => localStorage.getItem("refresh_token") || null;
+
+// 🔹 Eliminar tokens al cerrar sesión
 export const logoutUser = () => {
   localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
 };
 
 // 🔹 Manejo centralizado de errores
-const handleApiError = (error, message) => {
+export const handleApiError = (error, message) => {
   console.error(`${message}:`, error.response?.data || error.message);
 };

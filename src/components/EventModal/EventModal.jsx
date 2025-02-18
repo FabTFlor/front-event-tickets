@@ -1,40 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useFetchEventById } from "../../hooks/useFetchEvents";
 import useFetchEventSections from "../../hooks/useFetchEventSections";
+import { purchaseTicket } from "../../api/ticketApi"; 
 import "./EventModal.css";
 
-const EventModal = ({ eventId, onClose, onTriggerLogin }) => {
+const EventModal = ({ eventId, onClose, onTriggerLogin }) => {  // ✅ Se recibe `onTriggerLogin`
   const { data: event, isLoading, isError } = useFetchEventById(eventId);
   const { sections, isLoading: sectionsLoading } = useFetchEventSections(eventId);
-  
-  const [selectedSection, setSelectedSection] = useState(null);
-  const [ticketQuantity, setTicketQuantity] = useState(0);
 
-  // ✅ Verificar si el usuario está autenticado
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [ticketQuantity, setTicketQuantity] = useState(1);
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+
   const isAuthenticated = !!localStorage.getItem("access_token");
 
-  // 🔹 Seleccionar una sección y resetear cantidad
   const handleSelectSection = (section) => {
     setSelectedSection(section);
-    setTicketQuantity(0);
+    setTicketQuantity(1);
   };
 
-  // 🔹 Cambiar la cantidad de boletos
   const handleQuantityChange = (change) => {
-    setTicketQuantity((prev) => Math.max(0, prev + change));
+    setTicketQuantity((prev) => Math.max(1, prev + change));
   };
 
-  // 🔹 Calcular el total de la compra
   const calculateTotal = () => {
     return selectedSection ? selectedSection.price * ticketQuantity : 0;
   };
 
-  // 🔹 Si hay errores en la carga del evento, permitir cerrar el modal
+  const handlePurchase = async () => {
+    if (!selectedSection || ticketQuantity === 0) return;
+
+    try {
+      await purchaseTicket(selectedSection.id, ticketQuantity);
+      setPurchaseSuccess(true);
+    } catch (error) {
+      console.error("Error al comprar ticket:", error);
+      alert("Hubo un problema con la compra. Intenta nuevamente.");
+    }
+  };
+
   if (isLoading || sectionsLoading) {
     return (
       <div className="event-modal-overlay">
         <div className="event-modal-content">
-          <button className="event-close-button" onClick={onClose}>&times;</button>
+          <button className="event-modal-close-button" onClick={onClose}>&times;</button>
           Cargando detalles...
         </div>
       </div>
@@ -45,7 +54,7 @@ const EventModal = ({ eventId, onClose, onTriggerLogin }) => {
     return (
       <div className="event-modal-overlay">
         <div className="event-modal-content">
-          <button className="event-close-button" onClick={onClose}>&times;</button>
+          <button className="event-modal-close-button" onClick={onClose}>&times;</button>
           Error al cargar el evento.
         </div>
       </div>
@@ -56,61 +65,91 @@ const EventModal = ({ eventId, onClose, onTriggerLogin }) => {
 
   return (
     <div className="event-modal-overlay" onClick={onClose}>
-      <div className="event-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="event-close-button" onClick={onClose}>&times;</button>
+      <div className="event-modal-container" onClick={(e) => e.stopPropagation()}>
 
-        <h2>{event.name}</h2>
-        <img src={event.imageUrl} alt={event.name} className="event-image" />
-        <p><strong>Fecha:</strong> {new Date(event.date).toLocaleDateString("es-ES")}</p>
-        <p><strong>Ubicación:</strong> {event.venue.name}, {event.venue.location}</p>
-        <p>{event.eventInfo}</p>
+        {/* 🔹 Sección Izquierda - Mapa del evento */}
+        <div className="event-modal-map-area">
+          <img src="/assets/mapa-caupolican.png" alt="Mapa del evento" className="event-modal-map" />
+        </div>
 
-        <h3>Mapa del recinto</h3>
-        <img src="/images/venue-map.png" alt="Mapa del recinto" className="venue-map" />
+        {/* 🔹 Sección Derecha - Contenido Principal */}
+        <div className="event-modal-content">
+          <button className="event-modal-close-button" onClick={onClose}>&times;</button>
 
-        {/* 🔹 Secciones dinámicas, solo si existen */}
-        {sections.length > 0 && (
-          <>
-            <h3>Selecciona una sección</h3>
-            <div className="event-sections">
-              {sections.map((section) => (
-                <div key={section.id} className="event-section-item">
-                  <span className="section-name">{section.venueSectionName}</span>
-                  <span className="section-price">${section.price.toLocaleString()}</span>
-                  <span className="section-available">{section.remainingTickets} disponibles</span>
-                  <button 
-                    className={`event-section-button ${selectedSection?.id === section.id ? "selected" : ""}`} 
-                    onClick={() => handleSelectSection(section)}
-                  >
-                    {selectedSection?.id === section.id ? "Seleccionado" : "Seleccionar"}
-                  </button>
+          {/* 🔹 Si la compra es exitosa, mensaje de éxito */}
+          {purchaseSuccess ? (
+            <div className="event-modal-success-message">
+              <h2 className="event-modal-title">{event.name}</h2>
+              <p className="event-modal-success-text">Compra de {ticketQuantity} ticket(s) exitosa.</p>
+              <button className="event-modal-close-button-main" onClick={onClose}>Cerrar</button>
+            </div>
+          ) : (
+            <>
+              {/* 🔹 Encabezado */}
+              <div className="event-modal-header">
+                <h2 className="event-modal-title">{event.name}</h2>
+                <p className="event-modal-details">
+                  📅 {new Date(event.date).toLocaleDateString("es-ES")} | 📍 {event.venue.name}, {event.venue.location}
+                </p>
+                <p className="event-modal-info">{event.eventInfo}</p>
+              </div>
+
+              {/* 🔹 Lista de Secciones */}
+              {sections.length > 0 && (
+                <div className="event-modal-sections">
+                  <h3>Selecciona una sección</h3>
+                  {sections.map((section) => (
+                    <div key={section.id} className="event-modal-section-item">
+                      <span className="event-modal-section-name">{section.venueSectionName}</span>
+                      <span className="event-modal-section-price">${section.price.toLocaleString()}</span>
+                      <span className="event-modal-section-availability">{section.remainingTickets} disponibles</span>
+                      <button
+                        className={`event-modal-section-button ${selectedSection?.id === section.id ? "selected" : ""}`}
+                        onClick={() => handleSelectSection(section)}
+                      >
+                        {selectedSection?.id === section.id ? "Seleccionado" : "Seleccionar"}
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </>
-        )}
+              )}
 
-        {/* 🔹 Controles de cantidad solo si hay una sección seleccionada */}
-        {selectedSection && (
-          <div className="ticket-controls">
-            <h3>Seleccionaste: {selectedSection.venueSectionName}</h3>
-            <div className="ticket-counter">
-              <button className="ticket-button minus" onClick={() => handleQuantityChange(-1)} disabled={ticketQuantity === 0}>-</button>
-              <span className="ticket-quantity">{ticketQuantity}</span>
-              <button className="ticket-button plus" onClick={() => handleQuantityChange(1)} disabled={ticketQuantity >= selectedSection.remainingTickets}>+</button>
-            </div>
-          </div>
-        )}
+              {/* 🔹 Controles de compra */}
+              {selectedSection && (
+                <div className="event-modal-purchase-area">
+                  <h3 className="event-modal-selected-section">Seleccionaste: {selectedSection.venueSectionName}</h3>
+                  <div className="event-modal-ticket-controls">
+                    <button className="event-modal-ticket-minus" onClick={() => handleQuantityChange(-1)} disabled={ticketQuantity === 1}>
+                      -
+                    </button>
+                    <span className="event-modal-ticket-quantity">{ticketQuantity}</span>
+                    <button
+                      className="event-modal-ticket-plus"
+                      onClick={() => handleQuantityChange(1)}
+                      disabled={ticketQuantity >= selectedSection.remainingTickets}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              )}
 
-        {/* 🔹 Total y Botón de compra */}
-        <h3>Total: ${calculateTotal().toLocaleString()}</h3>
-        <button 
-          className="event-purchase-button" 
-          onClick={isAuthenticated ? () => alert("Compra realizada") : onTriggerLogin} 
-          disabled={!selectedSection || ticketQuantity === 0}
-        >
-          {!isAuthenticated ? "Inicia sesión para comprar" : "Comprar"}
-        </button>
+              {/* 🔹 Total de la compra */}
+              {selectedSection && (
+                <h3 className="event-modal-total-price">Total: ${calculateTotal().toLocaleString()}</h3>
+              )}
+
+              {/* 🔹 Botón de compra con login si no está autenticado */}
+              <button
+                className="event-modal-purchase-button"
+                onClick={isAuthenticated ? handlePurchase : onTriggerLogin} // ✅ Ahora sí abre el login
+              >
+                {!isAuthenticated ? "Inicia sesión para comprar" : "Comprar"}
+              </button>
+
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

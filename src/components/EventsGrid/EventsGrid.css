@@ -102,6 +102,7 @@
 
   .featured-image {
     height: 375px;
+    max-width: 600px;
   }
 
   /* 📱 Responsividad */

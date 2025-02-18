@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { loginUser, registerUser } from "../../api/authApi";
+import { useLocation, useNavigate } from "react-router-dom"; // ✅ Importamos las funciones de navegación
 import "./LoginForm.css"; // 🖌 Importamos estilos
 
 const LoginForm = ({ onClose }) => {
@@ -10,24 +11,36 @@ const LoginForm = ({ onClose }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const location = useLocation(); // ✅ Obtener la ruta actual
+  const navigate = useNavigate(); // ✅ Función para redirigir
+
   // 🔹 Validar Nombre y Apellido
   const isValidName = (name) => /^\S+\s+\S+$/.test(name);
+
+  // 🔹 Manejar cierre del modal con lógica de redirección
+  const handleClose = () => {
+    if (location.pathname === "/profile") {
+      navigate("/"); // ✅ Si está en /profile, redirigir al Home
+    } else {
+      onClose(); // ✅ Si está en otra ruta, solo cerrar el modal
+    }
+  };
 
   // 🔹 Cerrar modal con tecla ESC
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        handleClose();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, []);
 
   // 🔹 Manejar cierre solo si se hace clic fuera del modal
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("login-overlay")) {
-      onClose();
+      handleClose();
     }
   };
 
@@ -43,7 +56,7 @@ const LoginForm = ({ onClose }) => {
 
       setTimeout(() => {
         setLoading(false);
-        onClose();
+        handleClose(); // ✅ Redirigir o cerrar modal
       }, 1000);
     } catch (error) {
       setLoading(false);
@@ -69,7 +82,7 @@ const LoginForm = ({ onClose }) => {
 
       setTimeout(() => {
         setLoading(false);
-        onClose();
+        handleClose(); // ✅ Redirigir o cerrar modal
       }, 1000);
     } catch (error) {
       setLoading(false);
@@ -81,7 +94,8 @@ const LoginForm = ({ onClose }) => {
     <div className="login-overlay" onClick={handleOverlayClick}>
       <div className="login-modal" onClick={(e) => e.stopPropagation()}>
         {/* Botón para cerrar el modal */}
-        <button className="close-login" onClick={onClose}>&times;</button>
+        <button className="close-login" onClick={handleClose}>&times;</button>
+
 
         <div className="login-content">
           <h2 className="login-title">{isRegistering ? "Crear Cuenta" : "Acceso Exclusivo"}</h2>

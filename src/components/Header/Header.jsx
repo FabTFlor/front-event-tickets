@@ -34,7 +34,6 @@ const Header = ({ onOpenLogin }) => {
         <ul className={`nav-links ${menuOpen ? "active" : ""} ${scrolled ? "highlight" : ""}`}>
           <li><Link to="/events">Eventos</Link></li>
           <li><Link to="/profile">Perfil</Link></li>
-          <li><Link to="#contacto">Contacto</Link></li>
 
           {isAuthenticated ? (
             <li><a href="#" onClick={handleLogout}>Cerrar Sesión</a></li>

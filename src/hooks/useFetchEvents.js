@@ -1,17 +1,24 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
+// ✅ Imagen por defecto si no hay imagen en el evento
+const DEFAULT_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+
 // 🔹 Llamada para obtener todos los eventos
 const fetchEvents = async () => {
   const { data } = await axios.get("http://localhost:8080/api/events/all");
 
-  const events = data?.events || [];
-  console.log("🔍 Respuesta de la API:", data);
+  const events = (data?.events || []).map(event => ({
+    ...event,
+    imageUrl: event.imageUrl && event.imageUrl.trim() !== "" ? event.imageUrl : DEFAULT_IMAGE_URL
+  }));
 
-  // 🔹 Crear un Map para acceder rápido a eventos por ID
+  console.log("🔍 Respuesta de la API:", events);
+
+  // 🔹 Crear un Map para acceso rápido a eventos por ID
   const eventsById = new Map(events.map(event => [event.eventId, event]));
 
-  // 🔹 Eventos más vendidos para el Home (sin alterar la salida original)
+  // 🔹 Eventos más vendidos para la Home
   const homeEvents = [...events]
     .filter(event => event.status === "ACTIVE")
     .sort((a, b) => b.totalTicketsSold - a.totalTicketsSold)
@@ -34,17 +41,10 @@ const fetchEvents = async () => {
     }));
 
   // 🔹 Clasificación de eventos para la sección de eventos
-  const popularEvents = [...events]
-    .filter(event => event.status === "ACTIVE")
-    .sort((a, b) => b.totalTicketsSold - a.totalTicketsSold);
-
+  const popularEvents = events.filter(event => event.status === "ACTIVE").sort((a, b) => b.totalTicketsSold - a.totalTicketsSold);
   const upcomingEvents = events.filter(event => event.status === "PENDING");
-  const ongoingEvents = events
-    .filter(event => event.status === "ACTIVE")
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
-  const soldOutEvents = events.filter(
-    event => event.status === "ACTIVE" && event.remaining_tickets === 0
-  );
+  const ongoingEvents = events.filter(event => event.status === "ACTIVE").sort((a, b) => new Date(a.date) - new Date(b.date));
+  const soldOutEvents = events.filter(event => event.status === "ACTIVE" && event.remaining_tickets === 0);
   const finishedEvents = events.filter(event => event.status === "FINISHED");
 
   return {
@@ -63,16 +63,19 @@ const fetchEvents = async () => {
 // 🔹 Llamada para obtener un evento específico si no está en caché
 const fetchEventById = async eventId => {
   const { data } = await axios.get(`http://localhost:8080/api/events/${eventId}`);
-  console.log(`📡 Cargando evento ID ${eventId}:`, data);
-  return data;
+
+  return {
+    ...data,
+    imageUrl: data.imageUrl && data.imageUrl.trim() !== "" ? data.imageUrl : DEFAULT_IMAGE_URL
+  };
 };
 
-// 🔹 Hook para obtener todos los eventos y eventos individuales
+// 🔹 Hook para obtener todos los eventos
 const useFetchEvents = () => {
   return useQuery({
     queryKey: ["events"],
     queryFn: fetchEvents,
-    staleTime: 5 * 60 * 1000, // 5 minutos de caché
+    staleTime: 5 * 60 * 1000 // 5 minutos de caché
   });
 };
 
@@ -88,7 +91,7 @@ const useFetchEventById = eventId => {
   return useQuery({
     queryKey: ["event", eventId],
     queryFn: () => fetchEventById(eventId),
-    enabled: !!eventId, // Solo se ejecuta si `eventId` es válido
+    enabled: !!eventId // Solo se ejecuta si `eventId` es válido
   });
 };
 
