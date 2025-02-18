@@ -9,8 +9,8 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  color: white;
   cursor: none; /* 🔹 Oculta el cursor del sistema */
+  background-color: black;
 
 }
 

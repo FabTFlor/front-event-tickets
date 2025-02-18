@@ -13,7 +13,6 @@ const fetchEvents = async () => {
     imageUrl: event.imageUrl && event.imageUrl.trim() !== "" ? event.imageUrl : DEFAULT_IMAGE_URL
   }));
 
-  console.log("🔍 Respuesta de la API:", events);
 
   // 🔹 Crear un Map para acceso rápido a eventos por ID
   const eventsById = new Map(events.map(event => [event.eventId, event]));

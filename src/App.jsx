@@ -35,7 +35,7 @@ function App() {
 
   return (
     <>
-      <CustomCursor />
+      <CustomCursor className="fondo" />
       <Header onOpenLogin={openLogin} />
 
       <Routes>

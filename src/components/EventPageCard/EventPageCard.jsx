@@ -3,6 +3,7 @@ import "./EventPageCard.css";
 
 const EventPageCard = ({ event, onViewMore }) => {
   return (
+    <div className="event-page-card-general">
     <div className="event-page-card">
       <img src={event.imageUrl} alt={event.name} className="event-image" />
       <div className="event-content">
@@ -14,14 +15,15 @@ const EventPageCard = ({ event, onViewMore }) => {
           day: "numeric",
         })}</p>
         <p className="event-location">{event.venue.name}, {event.venue.location}</p>
-        <p className="event-info">{event.eventInfo}</p>
-        <button className="event-button" onClick={() => {
-          console.log("🖱 Evento seleccionado:", event);
+        
+      </div>
+      
+    </div>
+    <button className="event-button-page" onClick={() => {
           onViewMore(event);
         }}>
           Ver más
         </button>
-      </div>
     </div>
   );
 };

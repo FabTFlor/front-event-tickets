@@ -15,14 +15,16 @@
 /* 🎟 Contenedor del Modal */
 .event-modal-container {
     display: flex;
-    width: 80%;
-    max-width: 1200px;
-    background: rgba(0, 0, 0, 0.85);;
+    width: 90%;
+    max-width: 1400px;
+    background: rgba(0, 0, 0, 0.85);
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 0 30px rgba(128, 0, 255, 0.3);
     animation: fadeIn 0.3s ease-out;
+    position: relative;  /* ✅ Asegura que el botón de cerrar se posicione correctamente */
 }
+
 
 /* 🔹 Sección Izquierda - Mapa */
 .event-modal-map-area {
@@ -112,8 +114,9 @@
 .event-modal-sections {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-    margin-bottom: 1.5rem;
+    gap: clamp(0.5rem, 1vw, 0.1rem);  /* ✅ Espaciado adaptable */
+    max-height: 30vh;  /* ✅ Evita que la lista crezca demasiado */
+    overflow-y: auto;  /* ✅ Si hay muchas opciones, se hace scroll */
 }
 
 .event-modal-section-item {
@@ -121,9 +124,9 @@
     align-items: center;
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.1);
-    padding: 0.8rem;
+    padding: clamp(0.5rem, 1vw, 0.8rem);  /* ✅ Se ajusta automáticamente */
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 1vw, 0.5rem);  /* ✅ Tamaño de fuente adaptable */
 }
 
 .event-modal-section-name {
@@ -133,7 +136,7 @@
 
 .event-modal-section-price {
     flex: 1;
-    text-align: right;
+    text-align: center;
 }
 
 .event-modal-section-availability {
@@ -165,27 +168,30 @@
 /* 🎟 Control de Cantidad */
 .event-modal-purchase-area {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .event-modal-selected-section {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .event-modal-ticket-controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: clamp(0.3rem, 1vw, 0.8rem); /* ✅ Espaciado adaptable */
 }
 
 .event-modal-ticket-minus,
 .event-modal-ticket-plus {
     background: var(--purple);
     border: none;
-    padding: 0.5rem 1rem;
+    height: 2rem;
+    width: 2rem;
     border-radius: 5px;
     font-size: 1.2rem;
     cursor: pointer;
@@ -212,6 +218,7 @@
 
 /* 🎟 Botón de Compra */
 .event-modal-purchase-button {
+    margin-top: 0.5rem;
     width: 100%;
     padding: 1rem;
     font-size: 1rem;
@@ -246,7 +253,7 @@
 }
 
 /* 📱 Responsividad */
-@media (max-width: 768px) {
+@media (max-width: 900px) { /* ✅ Corrección en la media query */
     .event-modal-container {
         flex-direction: column;
         width: 90%;
@@ -268,6 +275,31 @@
     .event-modal-section-button {
         width: 100%;
         text-align: center;
+    }
+
+}
+/* 🎭 Escalado progresivo */
+@media (max-height: 750px) {
+    .event-modal-container {
+        margin-top: 2rem;
+    }
+    .event-modal-selected-section {
+        font-size: 0.9rem;
+        
+    }
+    .event-modal-total-price {
+        font-size: 0.9rem;
+        
+    }
+    .event-modal-section-item {
+        max-height: 3.5rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .event-modal-container {
+        margin-top: 2rem;
+        transform: scale(0.85); /* ✅ Reduce aún más si la pantalla es muy baja */
     }
 }
 
