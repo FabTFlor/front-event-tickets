@@ -12,6 +12,9 @@
     overflow: hidden;
   }
   
+  .toggle-form{
+    color: white;
+  }
   .login-title {
     font-size: 2rem;
     margin-bottom: 2rem;

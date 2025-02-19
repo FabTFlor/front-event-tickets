@@ -1,96 +1,162 @@
 import React, { useState } from "react";
 import "./UserProfilePage.css";
-import useAuth from "../../hooks/useAuth"; // ✅ Hook para obtener datos del usuario
-import { useNavigate } from "react-router-dom"; // ✅ Importar el hook de navegación
-import useTickets from "../../hooks/useTickets"; // ✅ Hook para obtener tickets
-import { logoutUser } from "../../api/authApi"; // ✅ Cerrar sesión
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import useTickets from "../../hooks/useTickets";
+import { logoutUser } from "../../api/authApi";
 
 const UserProfilePage = () => {
-  const navigate = useNavigate(); // ✅ Instanciar el hook
-  // 🔹 Obtener datos del usuario desde la API
+  const navigate = useNavigate();
   const { user, isLoading: isUserLoading, error: userError } = useAuth();
-  // 🔹 Obtener tickets desde la API
   const { tickets, isLoading: isTicketsLoading, error: ticketsError } = useTickets();
 
-  // 🔹 Estados locales
-  const [showTickets, setShowTickets] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [activeSection, setActiveSection] = useState("profile");
+  const [expandedTicketId, setExpandedTicketId] = useState(null);
 
-  // 🔹 Cerrar sesión
   const handleLogout = () => {
-    logoutUser(); // ✅ Borra los tokens
-    navigate("/"); // ✅ Redirige al Home
+    logoutUser();
+    navigate("/");
+  };
+
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+  };
+
+  const handleToggleTicket = (ticketId) => {
+    setExpandedTicketId((prevId) => (prevId === ticketId ? null : ticketId));
   };
 
   return (
-    <div className="events-page">
-      <div className="user-profile-container">
-        {/* 🔹 Información del usuario */}
-        <div className="user-profile-info">
-        <p className="user-profile-role">
-            {isUserLoading ? "Cargando rol..." : "Usuario" || "Rol no disponible"}
-          </p>
-          <h2 className="user-profile-name">
-            {isUserLoading ? "Cargando perfil..." : user?.name || "Nombre no disponible"}
+    <div className="user-profile-layout">
+      <aside className="user-profile-sidebar">
+        <div className="user-info">
+        <div className="user-info__avatar">
+  <img 
+    src="https://t3.ftcdn.net/jpg/11/28/72/64/360_F_1128726408_LedGktzAYmEDTVbWrwCn8EuqqsVRFGEh.jpg" 
+    alt="Foto de usuario genérico" 
+  />
+</div>
+          <h2 className="user-info__name">
+            {isUserLoading ? "Cargando..." : user?.name || "Nombre no disponible"}
           </h2>
-          <p className="user-profile-email">
-            {isUserLoading ? "Cargando correo..." : user?.email || "Correo no disponible"}
+          <p className="user-info__role">
+            {isUserLoading ? "Cargando rol..." : "Usuario"}
           </p>
-          <p className="user-profile-date">
-            Registrado desde:{" "}
-            {isUserLoading
-              ? "Cargando..."
-              : user?.createdAt
-              ? new Date(user.createdAt).toLocaleDateString("es-ES")
-              : "Fecha no disponible"}
-          </p>
-          
-          {/* Botones */}
-          <button className="user-profile-tickets-btn" onClick={() => setShowTickets(!showTickets)}>
-            {showTickets ? "Ocultar Tickets" : "Ver Mis Tickets"}
-          </button>
-          <button className="user-profile-settings-btn" onClick={() => setShowSettings(!showSettings)}>
-            {showSettings ? "Ocultar Configuración" : "Configuración"}
-          </button>
+          <nav className="user-profile-nav">
+            <button
+              className={`nav-item ${activeSection === "profile" ? "nav-item--active" : ""}`}
+              onClick={() => handleSectionChange("profile")}
+            >
+              Perfil
+            </button>
+            <button
+              className={`nav-item ${activeSection === "tickets" ? "nav-item--active" : ""}`}
+              onClick={() => handleSectionChange("tickets")}
+            >
+              Mis Tickets
+            </button>
+            <button
+              className={`nav-item ${activeSection === "settings" ? "nav-item--active" : ""}`}
+              onClick={() => handleSectionChange("settings")}
+            >
+              Configuración
+            </button>
+            <button className="nav-item nav-item--logout" onClick={handleLogout}>
+              Cerrar Sesión
+            </button>
+          </nav>
         </div>
+      </aside>
 
-        {/* 🔹 Sección de Tickets */}
-        {showTickets && (
-          <div className="user-tickets-section">
-            <h3 className="user-tickets-title">Entradas Compradas</h3>
+      <main className="user-profile-content">
+        {activeSection === "profile" && (
+          <section className="user-profile-section profile-overview">
+            <h3 className="section-title">Información General</h3>
+            {isUserLoading ? (
+              <p>Cargando perfil...</p>
+            ) : userError ? (
+              <p>Error al cargar usuario: {userError}</p>
+            ) : (
+              <div className="profile-details">
+                <p className="profile-details__email">
+                  <strong>Email:</strong> {user?.email || "Correo no disponible"}
+                </p>
+                <p className="profile-details__date">
+                  <strong>Registrado desde:</strong>{" "}
+                  {user?.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString("es-ES")
+                    : "Fecha no disponible"}
+                </p>
+              </div>
+            )}
+          </section>
+        )}
 
+        {activeSection === "tickets" && (
+          <section className="user-profile-section user-tickets">
+            <h3 className="section-title">Mis Tickets</h3>
             {isTicketsLoading ? (
               <p>Cargando tickets...</p>
             ) : ticketsError ? (
               <p>Error al obtener tickets: {ticketsError}</p>
             ) : tickets?.length > 0 ? (
-              tickets.map((ticket) => (
-                <div key={ticket.ticketId} className="user-ticket-item">
-                  <p><strong>Evento:</strong> {ticket.eventName || "Evento no disponible"}</p>
-                  <p><strong>Titular:</strong> {ticket.holder || "Titular no disponible"}</p>
-                  <p><strong>Fecha:</strong> {ticket.eventDate ? new Date(ticket.eventDate).toLocaleDateString("es-ES") : "Fecha no disponible"}</p>
-                  <p><strong>Sección:</strong> {ticket.sectionName || "Sección no disponible"}</p>
-                  <p><strong>Precio:</strong> ${ticket.sectionPrice ? ticket.sectionPrice.toLocaleString() : "N/A"}</p>
-                </div>
-              ))
+              <div className="tickets-list">
+                {tickets.map((ticket) => {
+                  const isExpanded = expandedTicketId === ticket.ticketId;
+                  return (
+                    <div key={ticket.ticketId} className="ticket-accordion-item">
+                      <div
+                        className="ticket-accordion-header"
+                        onClick={() => handleToggleTicket(ticket.ticketId)}
+                      >
+                        <div className="ticket-accordion-header-info">
+                          <h4 className="ticket-accordion-event">
+                            {ticket.eventName || "Evento no disponible"}
+                          </h4>
+                          <span className="ticket-accordion-date">
+                            {ticket.eventDate
+                              ? new Date(ticket.eventDate).toLocaleDateString("es-ES")
+                              : "N/A"}
+                          </span>
+                        </div>
+                        <button className="ticket-accordion-toggle">
+                          {isExpanded ? "Ocultar" : "Ver Detalles"}
+                        </button>
+                      </div>
+                      {isExpanded && (
+                        <div className="ticket-accordion-content">
+                          <p>
+                            <strong>Titular:</strong> {ticket.holder || "N/A"}
+                          </p>
+                          <p>
+                            <strong>Sección:</strong> {ticket.sectionName || "N/A"}
+                          </p>
+                          <p>
+                            <strong>Precio:</strong>{" "}
+                            {ticket.sectionPrice
+                              ? `$${ticket.sectionPrice.toLocaleString()}`
+                              : "N/A"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             ) : (
               <p className="user-no-tickets">No has comprado tickets aún.</p>
             )}
-          </div>
+          </section>
         )}
 
-        {/* 🔹 Sección de Configuración */}
-        {showSettings && (
-          <div className="user-settings-section">
-            <h3 className="user-settings-title">Configuración</h3>
+        {activeSection === "settings" && (
+          <section className="user-profile-section user-settings">
+            <h3 className="section-title">Configuración</h3>
             <button className="user-settings-btn">✏️ Editar Perfil</button>
             <button className="user-settings-btn">🔐 Cambiar Contraseña</button>
-            <button className="user-settings-btn logout" onClick={handleLogout}>
-              🚪 Cerrar Sesión
-            </button>
-          </div>
+          </section>
         )}
-      </div>
+      </main>
     </div>
   );
 };

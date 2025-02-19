@@ -8,6 +8,21 @@ const EventModal = ({ eventId, onClose, onTriggerLogin }) => {  // ✅ Se recibe
   const { data: event, isLoading, isError } = useFetchEventById(eventId);
   const { sections, isLoading: sectionsLoading } = useFetchEventSections(eventId);
 
+
+  function getMapSrc(venueId) {
+    console.log(event.venue.id)
+
+    switch (venueId) {
+      case 1:
+        return "/assets/mapa-caupolican.png";
+      case 2:
+        return "/assets/mapa-nacional.png";
+      default:
+        return "/assets/mapa-default.png"; // fallback opcional
+
+    }
+  }
+
   const [selectedSection, setSelectedSection] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
@@ -69,7 +84,13 @@ const EventModal = ({ eventId, onClose, onTriggerLogin }) => {  // ✅ Se recibe
 
         {/* 🔹 Sección Izquierda - Mapa del evento */}
         <div className="event-modal-map-area">
-          <img src="/assets/mapa-caupolican.png" alt="Mapa del evento" className="event-modal-map" />
+        <div className="event-modal-map-area">
+  <img
+    src={getMapSrc(event.venue.id)}
+    alt="Mapa del evento"
+    className="event-modal-map"
+  />
+</div>
         </div>
 
         {/* 🔹 Sección Derecha - Contenido Principal */}

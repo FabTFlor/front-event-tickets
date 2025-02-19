@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// EventsPage.jsx
+import React, { useState, useRef } from "react";
 import EventPageCard from "../../components/EventPageCard/EventPageCard";
 import EventModal from "../../components/EventModal/EventModal";
 import LoginForm from "../../components/Auth/LoginForm";
@@ -7,9 +8,7 @@ import "./EventsPage.css";
 
 const EventsPage = () => {
   const { data, isLoading, isError } = useFetchEvents();
-
   const eventsPage = data?.eventsPage || {};
-
   const categorizedEvents = {
     popular: eventsPage.popularEvents || [],
     upcoming: eventsPage.upcomingEvents || [],
@@ -18,65 +17,71 @@ const EventsPage = () => {
     finished: eventsPage.finishedEvents || [],
   };
 
-  // Estado para controlar el modal del evento seleccionado
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const containersRef = useRef({});
 
   const openLogin = () => setIsLoginOpen(true);
   const closeLogin = () => setIsLoginOpen(false);
-
   const openModal = (eventId) => setSelectedEventId(eventId);
   const closeModal = () => setSelectedEventId(null);
 
-  if (isLoading) {
-    return <div className="loading">Cargando eventos...</div>;
-  }
-  if (isError) {
-    return <div className="error">Error al cargar los eventos.</div>;
-  }
+  const scrollLeft = (category) => {
+    containersRef.current[category]?.scrollBy({ left: -300, behavior: "smooth" });
+  };
+  const scrollRight = (category) => {
+    containersRef.current[category]?.scrollBy({ left: 300, behavior: "smooth" });
+  };
+
+  if (isLoading) return <div className="loading">Cargando eventos...</div>;
+  if (isError) return <div className="error">Error al cargar los eventos.</div>;
 
   return (
     <div className="events-page">
       <h1 className="page-title">Eventos</h1>
-
       {Object.entries(categorizedEvents).map(([category, events]) =>
-        events.length > 0 ? (
+        events.length > 0 && (
           <section key={category} className="event-category">
-            <h2 className="category-title">
-              {category === "popular"
-                ? "Populares"
-                : category === "upcoming"
-                ? "Próximamente"
-                : category === "ongoing"
-                ? "En Curso"
-                : category === "soldOut"
-                ? "Agotados"
-                : "Finalizados"}
-            </h2>
-            <div className="event-grid">
-              {events.map((event) => {
-                return (
+            <div className="category-header">
+              <h2 className="category-title">
+                {category === "popular"
+                  ? "Populares"
+                  : category === "upcoming"
+                  ? "Próximamente"
+                  : category === "ongoing"
+                  ? "En Curso"
+                  : category === "soldOut"
+                  ? "Agotados"
+                  : "Finalizados"}
+              </h2>
+              <div className="scroll-arrows">
+                <button onClick={() => scrollLeft(category)} className="arrow-btn">‹</button>
+                <button onClick={() => scrollRight(category)} className="arrow-btn">›</button>
+              </div>
+            </div>
+            <div
+              className="event-scroll-container"
+              ref={(el) => (containersRef.current[category] = el)}
+            >
+              {events.map((event) => (
+                <div key={event.eventId} className="scroll-item">
                   <EventPageCard
-                    key={event.eventId}
                     event={event}
-                    onViewMore={() => openModal(event.eventId)} // Ahora pasamos solo el ID
+                    onViewMore={() => openModal(event.eventId)}
                   />
-                );
-              })}
+                </div>
+              ))}
             </div>
           </section>
-        ) : null
+        )
       )}
-
       {selectedEventId && (
-        <EventModal 
-          eventId={selectedEventId} 
-          onClose={closeModal} 
-          onTriggerLogin={openLogin} // ✅ Ahora `EventModal` puede abrir el login
+        <EventModal
+          eventId={selectedEventId}
+          onClose={closeModal}
+          onTriggerLogin={openLogin}
         />
       )}
-
-      {/* 🔹 Modal de Inicio de Sesión */}
       {isLoginOpen && (
         <div className="login-overlay" onClick={closeLogin}>
           <div className="login-modal" onClick={(e) => e.stopPropagation()}>

@@ -1,137 +1,313 @@
-/* 🎨 Contenedor principal del perfil */
-.user-profile-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(128, 0, 255, 0.2);
-    text-align: center;
-    animation: fadeIn 0.3s ease-out;
+:root {
+    --purple: #8000ff;
+    --orange: #ff6b00;
+    --white: #ffffff;
+    --dark-bg: #0a0a0a;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(10px);
     
-}
+  }
+  
+  /* 
+    ============================
+    CONTENEDOR PRINCIPAL (LAYOUT)
+    ============================
+  */
+  .user-profile-layout {
+    display: flex;
+    background: var(--dark-bg);
+    color: var(--white);
+    min-height: 100vh;
+  }
+  
+  /* 
+    =================
+    BARRA LATERAL (SIDEBAR)
+    =================
+  */
+  .user-profile-sidebar {
+    width: 260px;
+    padding: 2rem 1rem;
+    padding-top: 6rem; /* Ajusta según la altura de tu navbar transparente */
+    background: var(--glass-bg);
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.2);
+    z-index: 1;
+  }
+  
+  .user-info {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .user-info__avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1rem auto;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border: 2px solid var(--purple);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+  }
 
-/* 🔹 Información del usuario */
-.user-profile-info {
-    margin-bottom: 20px;
-}
-
-.user-profile-name {
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-
-.user-profile-role {
-    font-size: 1rem;
-    color: #ff6a00;
-    margin-bottom: 10px;
-}
-
-.user-profile-email,
-.user-profile-date {
+  .user-info__avatar img {
+    height: 100px;
+  }
+  
+  .user-info__name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .user-info__role {
     font-size: 0.9rem;
     color: #bbb;
-}
-
-/* 🏷 Botones */
-.user-profile-tickets-btn,
-.user-profile-settings-btn {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(45deg, var(--purple), var(--orange));
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.3s ease;
-}
-
-.user-profile-tickets-btn:hover,
-.user-profile-settings-btn:hover {
+  }
+  
+  .user-profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  
+  .nav-item {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--white);
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-item:hover {
+    border-color: var(--purple);
+    box-shadow: 0 0 10px rgba(128, 0, 255, 0.3);
     transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-/* 🎟 Sección de tickets */
-.user-tickets-section {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-}
-
-.user-tickets-title {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-}
-
-.user-ticket-item {
-    padding: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.user-ticket-item:last-child {
-    border-bottom: none;
-}
-
-.user-no-tickets {
-    font-size: 0.9rem;
-    color: #bbb;
-}
-
-/* ⚙️ Sección de configuración */
-.user-settings-section {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-}
-
-.user-settings-title {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-}
-
-.user-settings-btn {
-    display: block;
-    width: 100%;
-    margin: 5px 0;
-    padding: 10px;
+  }
+  
+  .nav-item--active {
+    background: linear-gradient(45deg, var(--purple), var(--orange));
     border: none;
+    color: var(--white);
+    font-weight: 600;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+  }
+  
+  .nav-item--logout {
+    margin-top: 2rem;
+    border-color: var(--orange);
+    box-shadow: none;
+  }
+  
+  .nav-item--logout:hover {
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
+    transform: translateY(-2px);
+  }
+  
+  /* 
+    =====================
+    CONTENIDO PRINCIPAL
+    =====================
+  */
+  .user-profile-content {
+    flex: 1;
+    padding: 2rem;
+    padding-top: 6rem; /* Ajusta según la altura de tu navbar transparente */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .user-profile-section {
+    background: none;
+    padding: 1rem;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+  }
+  
+  .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* 
+    ======================
+    SECCIÓN PERFIL (OVERVIEW)
+    ======================
+  */
+  .profile-overview {
+    /* Estilos específicos opcionales */
+  }
+  
+  .profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .profile-details__email,
+  .profile-details__date {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+  /* 
+    ======================
+    SECCIÓN TICKETS (ACORDEÓN)
+    ======================
+  */
+  .user-tickets {
+    /* Estilos específicos opcionales */
+  }
+  
+  .tickets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Ítem de acordeón (envoltorio) */
+  .ticket-accordion-item {
+    background: var(--glass-bg);
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+    overflow: hidden; /* Por si usas animaciones, así no se desborda */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Hover en el ítem completo (opcional) */
+  .ticket-accordion-item:hover {
+    box-shadow: 0 0 20px rgba(128, 0, 255, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Encabezado - zona clicable */
+  .ticket-accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    cursor: inherit;
+  }
+  
+  /* Info del encabezado (evento + fecha) */
+  .ticket-accordion-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+  .ticket-accordion-event {
+    font-weight: 600;
     font-size: 1rem;
-    font-weight: bold;
+  }
+  
+  .ticket-accordion-date {
+    font-size: 0.85rem;
+    color: #ccc;
+  }
+  
+  /* Botón para "Ver detalles" / "Ocultar" */
+  .ticket-accordion-toggle {
+    background: none;
+    border: 1px solid var(--purple);
+    color: var(--white);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
     cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.user-settings-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.logout {
-    background: #ff4444;
-    color: white;
-}
-
-.logout:hover {
-    background: #cc0000;
-}
-
-/* ✨ Animación de entrada */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  
+  .ticket-accordion-toggle:hover {
+    box-shadow: 0 0 10px rgba(128, 0, 255, 0.4);
+    transform: translateY(-2px);
+  }
+  
+  /* Contenido expandible */
+  .ticket-accordion-content {
+    padding: 1rem;
+    border-top: 1px dashed var(--purple);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  /* Mensaje de "no tickets" */
+  .user-no-tickets {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+  
+  /* 
+    ======================
+    SECCIÓN CONFIGURACIÓN
+    ======================
+  */
+  .user-settings {
+    /* Estilos específicos opcionales */
+  }
+  
+  .user-settings-btn {
+    display: block;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: linear-gradient(45deg, var(--purple), var(--orange));
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .user-settings-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(128, 0, 255, 0.4);
+  }
+  
+  /* 
+    =================
+    RESPONSIVIDAD
+    =================
+  */
+  @media (max-width: 768px) {
+    .user-profile-layout {
+      flex-direction: column;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+  
+    .user-profile-sidebar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 4rem; 
     }
-}
+  
+    .user-info {
+      margin-bottom: 1rem;
+    }
+  
+    .user-profile-nav {
+      flex-direction: row;
+      gap: 1rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+  
+    .user-profile-content {
+      padding: 1rem;
+      padding-top: 4rem;
+    }
+  }
+  
