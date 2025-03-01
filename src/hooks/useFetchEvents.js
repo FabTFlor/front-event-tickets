@@ -19,7 +19,7 @@ const fetchEvents = async () => {
 
   // 🔹 Eventos más vendidos para la Home
   const homeEvents = [...events]
-    .filter(event => event.status === "ACTIVE")
+    .filter(event => event.status.name === "ACTIVE")
     .sort((a, b) => b.totalTicketsSold - a.totalTicketsSold)
     .slice(0, 4)
     .map(event => ({
@@ -40,11 +40,11 @@ const fetchEvents = async () => {
     }));
 
   // 🔹 Clasificación de eventos para la sección de eventos
-  const popularEvents = events.filter(event => event.status === "ACTIVE").sort((a, b) => b.totalTicketsSold - a.totalTicketsSold);
-  const upcomingEvents = events.filter(event => event.status === "PENDING");
-  const ongoingEvents = events.filter(event => event.status === "ACTIVE").sort((a, b) => new Date(a.date) - new Date(b.date));
-  const soldOutEvents = events.filter(event => event.status === "ACTIVE" && event.remaining_tickets === 0);
-  const finishedEvents = events.filter(event => event.status === "FINISHED");
+  const popularEvents = events.filter(event => event.status.name === "ACTIVE").sort((a, b) => b.totalTicketsSold - a.totalTicketsSold);
+  const upcomingEvents = events.filter(event => event.status.name === "PENDING");
+  const ongoingEvents = events.filter(event => event.status.name === "ACTIVE").sort((a, b) => new Date(a.date) - new Date(b.date));
+  const soldOutEvents = events.filter(event => event.status.name === "ACTIVE" && event.remaining_tickets === 0);
+  const finishedEvents = events.filter(event => event.status.name === "FINISHED");
 
   return {
     eventsById, // ✅ Acceso rápido a eventos individuales

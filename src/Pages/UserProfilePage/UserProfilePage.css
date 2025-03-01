@@ -18,6 +18,7 @@
     background: var(--dark-bg);
     color: var(--white);
     min-height: 100vh;
+    padding-top: 70px;
   }
   
   /* 
@@ -27,8 +28,7 @@
   */
   .user-profile-sidebar {
     width: 260px;
-    padding: 2rem 1rem;
-    padding-top: 6rem; /* Ajusta según la altura de tu navbar transparente */
+    padding: 3rem 1rem;
     background: var(--glass-bg);
     box-shadow: 0 0 15px rgba(128, 0, 255, 0.2);
     z-index: 1;
@@ -116,11 +116,11 @@
   */
   .user-profile-content {
     flex: 1;
-    padding: 2rem;
-    padding-top: 6rem; /* Ajusta según la altura de tu navbar transparente */
+    padding: 3rem 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    background-color:#8000ff13;
   }
   
   .user-profile-section {
@@ -144,9 +144,7 @@
     SECCIÓN PERFIL (OVERVIEW)
     ======================
   */
-  .profile-overview {
-    /* Estilos específicos opcionales */
-  }
+
   
   .profile-details {
     display: flex;
@@ -165,10 +163,7 @@
     SECCIÓN TICKETS (ACORDEÓN)
     ======================
   */
-  .user-tickets {
-    /* Estilos específicos opcionales */
-  }
-  
+
   .tickets-list {
     display: flex;
     flex-direction: column;
@@ -253,9 +248,7 @@
     SECCIÓN CONFIGURACIÓN
     ======================
   */
-  .user-settings {
-    /* Estilos específicos opcionales */
-  }
+
   
   .user-settings-btn {
     display: block;
@@ -275,6 +268,221 @@
     transform: scale(1.05);
     box-shadow: 0 0 10px rgba(128, 0, 255, 0.4);
   }
+
+  /* 
+  =====================================
+  FORMULARIOS DE CONFIGURACIÓN NUEVOS
+  =====================================
+*/
+
+/* Contenedor del formulario para actualizar datos personales */
+.update-data-form {
+  background: var(--glass-bg);
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border: 2px solid var(--purple);
+  border-radius: 8px;
+}
+
+/* Título del formulario */
+.update-data-form h4 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Contenedor de cada campo del formulario (label + input) */
+.update-data-form div {
+  margin-bottom: 1rem;
+}
+
+.update-data-form label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.update-data-form input {
+  width: 100%;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--purple);
+  border-radius: 4px;
+  color: var(--white);
+  font-size: 0.9rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.update-data-form input:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(128, 0, 255, 0.5);
+}
+
+/* Botón para enviar la actualización */
+.update-data-form button[type="submit"] {
+  background: linear-gradient(45deg, var(--purple), var(--orange));
+  border: none;
+  padding: 0.6rem 1.2rem;
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.update-data-form button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+/* Mensaje de resultado del update */
+.update-message {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  padding: 0.6rem;
+  background: rgba(128, 0, 255, 0.1);
+  border-left: 4px solid var(--purple);
+  border-radius: 4px;
+}
+
+/* -------------------------------------------- */
+/* CONTENEDOR PARA EL FORMULARIO DE CONTRASEÑA */
+/* -------------------------------------------- */
+
+.change-password-form {
+  background: var(--glass-bg);
+  padding: 1rem;
+  border: 2px solid var(--orange);
+  border-radius: 8px;
+}
+
+.change-password-form h4 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.change-password-form div {
+  margin-bottom: 1rem;
+}
+
+.change-password-form label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.change-password-form input {
+  width: 100%;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--orange);
+  border-radius: 4px;
+  color: var(--white);
+  font-size: 0.9rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.change-password-form input:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 107, 0, 0.5);
+}
+
+.change-password-form button[type="submit"] {
+  background: linear-gradient(45deg, var(--purple), var(--orange));
+  border: none;
+  padding: 0.6rem 1.2rem;
+  color: var(--white);
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.change-password-form button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+/* Mensaje de resultado al cambiar contraseña */
+.password-message {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  padding: 0.6rem;
+  background: rgba(255, 107, 0, 0.1);
+  border-left: 4px solid var(--orange);
+  border-radius: 4px;
+}
+
+.param-form {
+  display: grid;
+  grid-template-columns: 1fr auto; /* El input crece, el botón mantiene su tamaño */
+  gap: 8px;}
+
+/* Clase base para todos los botones */
+.btn {
+  display: inline-block;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--white);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover genérico para .btn */
+.btn:hover {
+  border-color: var(--purple);
+  box-shadow: 0 0 10px rgba(128, 0, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Botón para alternar la edición ("✏️ Editar" / "Bloquear") */
+.edit-toggle-btn {
+  border-color: var(--purple);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+/* Hover específico para .edit-toggle-btn (opcional) */
+.edit-toggle-btn:hover {
+  box-shadow: 0 0 10px rgba(128, 0, 255, 0.4);
+}
+
+/* Botón de envío del formulario de actualización */
+.update-submit-btn {
+  background: linear-gradient(45deg, var(--purple), var(--orange));
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* Hover para .update-submit-btn (opcional) */
+.update-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+/* Botón de envío del formulario de contraseña */
+.password-submit-btn {
+  background: linear-gradient(45deg, var(--purple), var(--orange));
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* Hover para .password-submit-btn (opcional) */
+.password-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+
+
   
   /* 
     =================
@@ -291,7 +499,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-top: 4rem; 
+      padding: 5rem; 
     }
   
     .user-info {
@@ -307,7 +515,7 @@
   
     .user-profile-content {
       padding: 1rem;
-      padding-top: 4rem;
+      padding-top: 1rem;
     }
   }
   
