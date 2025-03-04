@@ -74,7 +74,7 @@ const CreateEvent = () => {
       setShowModal(true);
       return;
     }
-
+  
     if (selectedSections.length === 0) {
       setModalProps({
         title: "Sin Secciones",
@@ -84,7 +84,7 @@ const CreateEvent = () => {
       setShowModal(true);
       return;
     }
-
+  
     // 🔹 Normalizar los datos antes de enviarlos
     const requestData = {
       name: eventName.trim(),
@@ -94,23 +94,53 @@ const CreateEvent = () => {
       eventInfo: eventInfo.trim(),
       imageUrl: imageUrl.trim()
     };
-
+  
+    // 📌 🔽 🔽 🔽 AGREGA ESTE BLOQUE EN LA LÍNEA 97 🔽 🔽 🔽
+    const token = localStorage.getItem("access_token"); 
+  
+    console.log("📌 Enviando solicitud al backend:");
+    console.log("🔹 URL:", "http://localhost:8080/api/events/create");
+    console.log("🔹 Método: POST");
+    console.log("🔹 Headers:", {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    });
+    console.log("🔹 Body (JSON):", JSON.stringify(requestData, null, 2));
+    // 📌 🔼 🔼 🔼 AGREGA ESTE BLOQUE EN LA LÍNEA 97 🔼 🔼 🔼
+  
     try {
       // 🔹 Crear el evento
       const eventResponse = await createEvent(requestData);
       const eventId = eventResponse.eventId;
-
+  
       // 🔹 Crear secciones para el evento
       for (const sectionId of selectedSections) {
-        await createEventSection({
+        const sectionData = {
           eventId,
           venueSectionId: sectionId,
           price: ticketPrices[sectionId] || 0,
           isNumbered: false,
           remainingTickets: remainingTickets[sectionId] || 0
+        };
+      
+        console.log("📌 Enviando solicitud de creación de sección de evento:");
+        console.log("🔹 URL:", "http://localhost:8080/api/event-sections/create");
+        console.log("🔹 Método: POST");
+        console.log("🔹 Headers:", {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         });
+        console.log("🔹 Body (JSON):", JSON.stringify(sectionData, null, 2));
+      
+        try {
+          const sectionResponse = await createEventSection(sectionData);
+          console.log("✅ Sección de evento creada correctamente:", sectionResponse);
+        } catch (error) {
+          console.error("❌ Error al crear la sección de evento:", error.response?.data || error.message);
+        }
       }
-
+      
+  
       // 🔹 Mostramos modal de éxito
       setModalProps({
         title: "¡Evento Creado!",
@@ -123,7 +153,7 @@ const CreateEvent = () => {
         }
       });
       setShowModal(true);
-
+  
       // 🔹 Resetear formulario
       setEventName("");
       setVenueId("");
@@ -134,7 +164,7 @@ const CreateEvent = () => {
       setSelectedSections([]);
       setTicketPrices({});
       setRemainingTickets({});
-
+  
     } catch (error) {
       console.error("❌ Error en la petición:", error.response ? error.response.data : error);
       setModalProps({
@@ -145,6 +175,7 @@ const CreateEvent = () => {
       setShowModal(true);
     }
   };
+  
 
   return (
     <div className="admin-create-event-container">

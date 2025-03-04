@@ -176,19 +176,33 @@ const EditVenue = () => {
       setShowModal(true);
       return;
     }
-
+  
+    // 📌 🔽 🔽 🔽 AGREGA ESTE BLOQUE EN LA LÍNEA 188 🔽 🔽 🔽
+    const token = localStorage.getItem("access_token");
+    const payload = {
+      venueId: selectedVenue.id,
+      sectionTypeId: selectedSection,
+      isNumbered: false
+    };
+  
+    console.log("📌 Enviando solicitud al backend:");
+    console.log("🔹 URL:", "http://localhost:8080/api/venue-sections/create");
+    console.log("🔹 Método: POST");
+    console.log("🔹 Headers:", {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    });
+    console.log("🔹 Body (JSON):", JSON.stringify(payload, null, 2));
+    // 📌 🔼 🔼 🔼 AGREGA ESTE BLOQUE EN LA LÍNEA 188 🔼 🔼 🔼
+  
     try {
-      const response = await createVenueSection({
-        venueId: selectedVenue.id,
-        sectionTypeId: selectedSection,
-        isNumbered: false
-      });
-
+      const response = await createVenueSection(payload);
+  
       // Convertimos selectedSection a número por si es string
       const sectionIdNumber = Number(selectedSection);
       const foundSection = sectionTypes.find(s => s.id === sectionIdNumber);
       const sectionName = foundSection?.name || "SECCIÓN";
-
+  
       setSections((prev) => [
         ...prev,
         {
@@ -197,7 +211,7 @@ const EditVenue = () => {
           isNumbered: false
         }
       ]);
-
+  
       setModalProps({
         title: "Sección Añadida",
         message: "La sección se ha añadido con éxito al recinto.",
@@ -214,6 +228,7 @@ const EditVenue = () => {
       setShowModal(true);
     }
   };
+  
 
   return (
     <div className="admin-edit-venue-container">
