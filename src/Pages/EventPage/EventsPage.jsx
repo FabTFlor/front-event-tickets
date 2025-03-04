@@ -26,6 +26,29 @@ const EventsPage = () => {
   const openModal = (eventId) => setSelectedEventId(eventId);
   const closeModal = () => setSelectedEventId(null);
 
+  // 🔹 Determina si el botón "Ver más" debe estar deshabilitado según la categoría.
+  //    También define el texto que se mostrará cuando esté deshabilitado.
+  const getButtonState = (category) => {
+    // 🎯 Ajusta aquí las reglas para tu clasificación de eventos.
+    if (category === "upcoming") {
+      return {
+        disabled: true,
+        reason: "No disponible",
+      };
+    }
+    if (category === "soldOut" || category === "finished") {
+      return {
+        disabled: true,
+        reason: "No disponible",
+      };
+    }
+    // Por defecto: eventos populares u ongoing están habilitados
+    return {
+      disabled: false,
+      reason: "",
+    };
+  };
+
   const scrollLeft = (category) => {
     containersRef.current[category]?.scrollBy({ left: -300, behavior: "smooth" });
   };
@@ -63,14 +86,21 @@ const EventsPage = () => {
               className="event-scroll-container"
               ref={(el) => (containersRef.current[category] = el)}
             >
-              {events.map((event) => (
-                <div key={event.eventId} className="scroll-item">
-                  <EventPageCard
-                    event={event}
-                    onViewMore={() => openModal(event.eventId)}
-                  />
-                </div>
-              ))}
+              {events.map((event) => {
+                // 🔹 Determinamos estado del botón según la categoría
+                const { disabled, reason } = getButtonState(category);
+
+                return (
+                  <div key={event.eventId} className="scroll-item">
+                    <EventPageCard
+                      event={event}
+                      disabled={disabled}
+                      disabledReason={reason}
+                      onViewMore={() => openModal(event.eventId)}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </section>
         )

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UserProfilePage.css";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import useTickets from "../../hooks/useTickets";
 import { logoutUser } from "../../api/authApi";
+import { getUserData } from "../../api/userApi"; // 
+
 
 const updateUserData = async (data) => {
   const token = localStorage.getItem("access_token");
@@ -22,7 +24,7 @@ const updateUserData = async (data) => {
 };
 
 const updateUserPassword = async (data) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("access_token");
   console.log("Enviando PUT a /api/v1/users/me/password con payload:", data);
   console.log("Token usado:", token);
 
@@ -44,6 +46,7 @@ export default function UserProfilePage() {
 
   const [activeSection, setActiveSection] = useState("profile");
   const [expandedTicketId, setExpandedTicketId] = useState(null);
+  const [userRole, setUserRole] = useState(null); // ✅ Estado para almacenar el rol
 
   const [updateForm, setUpdateForm] = useState({
     name: user?.name || "",
@@ -52,6 +55,28 @@ export default function UserProfilePage() {
     phoneNumber: user?.phoneNumber || "",
     currentPassword: ""
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await getUserData();
+        setUpdateForm({
+          name: userData.name || "",
+          email: userData.email || "",
+          dni: userData.dni || "",
+          phoneNumber: userData.phoneNumber || "",
+          currentPassword: "",
+        });
+        setUserRole(userData.role); // ✅ Guardamos el rol correctamente
+      } catch (error) {
+        console.error("❌ Error al obtener datos del usuario:", error);
+      }
+    };
+
+    fetchUserData(); // ✅ Se ejecuta siempre que se renderiza el componente
+  }, []); // 🔹 Solo se ejecuta una vez cuando el componente se monta
+
+
 
   const [editableFields, setEditableFields] = useState({
     name: false,
@@ -68,6 +93,31 @@ export default function UserProfilePage() {
 
   const [updateMessage, setUpdateMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
+
+
+// Dentro del componente UserProfilePage:
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const userData = await getUserData();
+      setUpdateForm({
+        name: userData.name || "",
+        email: userData.email || "",
+        dni: userData.dni || "",
+        phoneNumber: userData.phoneNumber || "",
+        currentPassword: "",
+      });
+      setUserRole(userData.role); // ✅ Guardamos el rol del usuario
+    } catch (error) {
+      console.error("❌ Error al obtener datos del usuario:", error);
+    }
+  };
+
+  if (activeSection === "settings" || userRole === null) {
+    fetchUserData();
+  }
+}, [activeSection, userRole]); // ✅ Se ejecuta cuando cambia la sección o el rol
+
 
   const handleLogout = () => {
     logoutUser();
@@ -98,30 +148,32 @@ export default function UserProfilePage() {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     setUpdateMessage("");
+  
     const original = user || {};
     const fields = ["name", "email", "dni", "phoneNumber"];
     const payload = {};
-
+  
+    // 🔹 Se envían solo los datos que realmente han cambiado
     fields.forEach((f) => {
-      if (
-        editableFields[f] &&
-        updateForm[f] !== original[f] &&
-        updateForm[f].trim() !== ""
-      ) {
+      if (updateForm[f] !== original[f] && updateForm[f].trim() !== "") {
         payload[f] = updateForm[f];
       }
     });
-
+  
+    // ✅ Si no hay cambios, solo muestra un mensaje sin bloquear
     if (!Object.keys(payload).length) {
-      setUpdateMessage("No has cambiado ningún dato o los campos están bloqueados.");
+      setUpdateMessage("No has cambiado ningún dato.");
       return;
     }
+  
+    // ⚠️ La contraseña actual es obligatoria para confirmar cambios
     if (!updateForm.currentPassword) {
       setUpdateMessage("Debes ingresar tu contraseña actual para confirmar cambios.");
       return;
     }
+  
     payload.currentPassword = updateForm.currentPassword;
-
+  
     try {
       const result = await updateUserData(payload);
       if (result.ncode === 1) {
@@ -134,6 +186,7 @@ export default function UserProfilePage() {
       setUpdateMessage("Ocurrió un error al actualizar el perfil.");
     }
   };
+  
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -174,28 +227,34 @@ export default function UserProfilePage() {
             {isUserLoading ? "Cargando rol..." : "Usuario"}
           </p>
           <nav className="user-profile-nav">
-            <button
-              className={`btn nav-item ${activeSection === "profile" ? "nav-item--active" : ""}`}
-              onClick={() => handleSectionChange("profile")}
-            >
-              Perfil
-            </button>
-            <button
-              className={`btn nav-item ${activeSection === "tickets" ? "nav-item--active" : ""}`}
-              onClick={() => handleSectionChange("tickets")}
-            >
-              Mis Tickets
-            </button>
-            <button
-              className={`btn nav-item ${activeSection === "settings" ? "nav-item--active" : ""}`}
-              onClick={() => handleSectionChange("settings")}
-            >
-              Configuración
-            </button>
-            <button className="btn nav-item nav-item--logout" onClick={handleLogout}>
-              Cerrar Sesión
-            </button>
-          </nav>
+  <button
+    className={`btn nav-item ${activeSection === "profile" ? "nav-item--active" : ""}`}
+    onClick={() => handleSectionChange("profile")}
+  >
+    Perfil
+  </button>
+  
+  {/* 🔹 Ocultar "Mis Tickets" si el usuario es ADMIN */}
+            {userRole !== "ADMIN" && (
+              <button
+                className={`btn nav-item ${activeSection === "tickets" ? "nav-item--active" : ""}`}
+                onClick={() => setActiveSection("tickets")}
+              >
+                Mis Tickets
+              </button>
+            )}
+
+  <button
+    className={`btn nav-item ${activeSection === "settings" ? "nav-item--active" : ""}`}
+    onClick={() => handleSectionChange("settings")}
+  >
+    Configuración
+  </button>
+  <button className="btn nav-item nav-item--logout" onClick={handleLogout}>
+    Cerrar Sesión
+  </button>
+</nav>
+
         </div>
       </aside>
 
@@ -265,139 +324,108 @@ export default function UserProfilePage() {
           </section>
         )}
 
-        {activeSection === "settings" && (
-          <section className="user-profile-section user-settings">
-            <h3 className="section-title">Configuración</h3>
+{activeSection === "settings" && (
+  <section className="user-profile-section user-settings">
+    <h3 className="section-title">Configuración</h3>
 
-            <div className="update-data-form">
-              <h4>Actualizar Datos Personales</h4>
-              <form onSubmit={handleUpdateProfile}>
-                <div>
-                  <label>Nombre:</label>
-                  <div className="param-form">
-                    <input
-                      type="text"
-                      name="name"
-                      disabled={!editableFields.name}
-                      value={updateForm.name}
-                      onChange={handleUpdateFormChange}
-                    />
-                    <button
-                      type="button"
-                      className="btn edit-toggle-btn"
-                      onClick={() => toggleField("name")}
-                    >
-                      {editableFields.name ? "Bloquear" : "✏️ Editar"}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label>Email:</label>
-                  <div className="param-form">
-                    <input
-                      type="email"
-                      name="email"
-                      disabled={!editableFields.email}
-                      value={updateForm.email}
-                      onChange={handleUpdateFormChange}
-                    />
-                    <button
-                      type="button"
-                      className="btn edit-toggle-btn"
-                      onClick={() => toggleField("email")}
-                    >
-                      {editableFields.email ? "Bloquear" : "✏️ Editar"}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label>DNI:</label>
-                  <div className="param-form">
-                    <input
-                      type="text"
-                      name="dni"
-                      disabled={!editableFields.dni}
-                      value={updateForm.dni}
-                      onChange={handleUpdateFormChange}
-                    />
-                    <button
-                      type="button"
-                      className="btn edit-toggle-btn"
-                      onClick={() => toggleField("dni")}
-                    >
-                      {editableFields.dni ? "Bloquear" : "✏️ Editar"}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label>Teléfono:</label>
-                  <div className="param-form">
-                    <input
-                      type="text"
-                      name="phoneNumber"
-                      disabled={!editableFields.phoneNumber}
-                      value={updateForm.phoneNumber}
-                      onChange={handleUpdateFormChange}
-                    />
-                    <button
-                      type="button"
-                      className="btn edit-toggle-btn"
-                      onClick={() => toggleField("phoneNumber")}
-                    >
-                      {editableFields.phoneNumber ? "Bloquear" : "✏️ Editar"}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label>Contraseña Actual (requerida si cambias algún campo):</label>
-                  <input
-                    type="password"
-                    name="currentPassword"
-                    value={updateForm.currentPassword}
-                    onChange={handleUpdateFormChange}
-                  />
-                </div>
-                <button type="submit" className="btn update-submit-btn">Actualizar</button>
-              </form>
-              {updateMessage && <p className="update-message">{updateMessage}</p>}
-            </div>
+    <div className="update-data-form">
+      <h4>Actualizar Datos Personales</h4>
+      <form onSubmit={handleUpdateProfile}>
+        <div>
+          <label>Nombre:</label>
+          <input
+            type="text"
+            name="name"
+            value={updateForm.name}
+            onChange={handleUpdateFormChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={updateForm.email}
+            onChange={handleUpdateFormChange}
+            required
+          />
+        </div>
+        <div>
+          <label>DNI:</label>
+          <input
+            type="text"
+            name="dni"
+            value={updateForm.dni}
+            onChange={handleUpdateFormChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Teléfono:</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={updateForm.phoneNumber}
+            onChange={handleUpdateFormChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Contraseña Actual (requerida para confirmar cambios):</label>
+          <input
+            type="password"
+            name="currentPassword"
+            value={updateForm.currentPassword}
+            onChange={handleUpdateFormChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn update-submit-btn">Actualizar</button>
+      </form>
+      {updateMessage && <p className="update-message">{updateMessage}</p>}
+    </div>
 
-            <div className="change-password-form">
-              <h4>Cambiar Contraseña</h4>
-              <form onSubmit={handleChangePassword}>
-                <div>
-                  <label>Contraseña Actual:</label>
-                  <input
-                    type="password"
-                    name="currentPassword"
-                    value={passwordForm.currentPassword}
-                    onChange={handlePasswordFormChange}
-                  />
-                </div>
-                <div>
-                  <label>Nueva Contraseña:</label>
-                  <input
-                    type="password"
-                    name="newPassword"
-                    value={passwordForm.newPassword}
-                    onChange={handlePasswordFormChange}
-                  />
-                </div>
-                <div>
-                  <label>Repetir Nueva Contraseña:</label>
-                  <input
-                    type="password"
-                    name="confirmNewPassword"
-                    value={passwordForm.confirmNewPassword}
-                    onChange={handlePasswordFormChange}
-                  />
-                </div>
-                <button type="submit" className="btn password-submit-btn">Cambiar Contraseña</button>
-              </form>
-              {passwordMessage && <p className="password-message">{passwordMessage}</p>}
-            </div>
-          </section>
-        )}
+    <div className="change-password-form">
+      <h4>Cambiar Contraseña</h4>
+      <form onSubmit={handleChangePassword}>
+        <div>
+          <label>Contraseña Actual:</label>
+          <input
+            type="password"
+            name="currentPassword"
+            value={passwordForm.currentPassword}
+            onChange={handlePasswordFormChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Nueva Contraseña:</label>
+          <input
+            type="password"
+            name="newPassword"
+            value={passwordForm.newPassword}
+            onChange={handlePasswordFormChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Repetir Nueva Contraseña:</label>
+          <input
+            type="password"
+            name="confirmNewPassword"
+            value={passwordForm.confirmNewPassword}
+            onChange={handlePasswordFormChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn password-submit-btn">Cambiar Contraseña</button>
+      </form>
+      {passwordMessage && <p className="password-message">{passwordMessage}</p>}
+    </div>
+  </section>
+)}
+
       </main>
     </div>
   );

@@ -2,7 +2,7 @@
 import React from "react";
 import "./EventPageCard.css";
 
-const EventPageCard = ({ event, onViewMore }) => {
+const EventPageCard = ({ event, onViewMore, disabled = false, disabledReason = "" }) => {
   return (
     <div className="event-page-card-general">
       <div className="event-page-card">
@@ -30,11 +30,14 @@ const EventPageCard = ({ event, onViewMore }) => {
           </p>
         </div>
       </div>
+
+      {/* 🔹 Si está deshabilitado, el botón se muestra con un texto y estado disabled */}
       <button
         className="event-button-page"
-        onClick={() => onViewMore(event)}
+        onClick={() => !disabled && onViewMore(event)}
+        disabled={disabled}
       >
-        Ver más
+        {disabled ? disabledReason : "Ver más"}
       </button>
     </div>
   );

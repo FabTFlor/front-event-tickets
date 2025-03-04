@@ -84,6 +84,8 @@
   width: 250px;
 }
 
+
+
 /* Event Card General */
 .event-page-card-general {
   display: flex;
@@ -91,14 +93,15 @@
   align-items: center;
   background: #292929;
   border-radius: 12px;
+  border: 1px solid rgba(128, 0, 255, 0.13);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 15px rgba(128, 0, 255, 0.11); /* 🔥 Glow sutil en morado */
 }
 
 .event-page-card-general:hover {
   transform: translateY(-5px);
-  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 25px rgba(128, 0, 255, 0.7); /* ✨ Glow más fuerte al pasar el mouse */
 }
 
 /* Event Card */
@@ -214,3 +217,4 @@
     font-size: 1rem;
   }
 }
+

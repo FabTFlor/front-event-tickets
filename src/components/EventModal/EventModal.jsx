@@ -1,33 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFetchEventById } from "../../hooks/useFetchEvents";
 import useFetchEventSections from "../../hooks/useFetchEventSections";
 import { purchaseTicket } from "../../api/ticketApi"; 
+import { getUserData } from "../../api/userApi"; // ✅ Importamos la API del usuario
 import "./EventModal.css";
 
-const EventModal = ({ eventId, onClose, onTriggerLogin }) => {  // ✅ Se recibe `onTriggerLogin`
+const EventModal = ({ eventId, onClose, onTriggerLogin }) => {
   const { data: event, isLoading, isError } = useFetchEventById(eventId);
   const { sections, isLoading: sectionsLoading } = useFetchEventSections(eventId);
 
-
   function getMapSrc(venueId) {
-    console.log(event.venue.id)
-
     switch (venueId) {
       case 1:
         return "/assets/mapa-caupolican.png";
       case 2:
         return "/assets/mapa-nacional.png";
       default:
-        return "/assets/mapa-default.png"; // fallback opcional
-
+        return "/assets/mapa-default.png"; 
     }
   }
 
   const [selectedSection, setSelectedSection] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+  const [userRole, setUserRole] = useState(null); // ✅ Nuevo estado para el rol del usuario
 
   const isAuthenticated = !!localStorage.getItem("access_token");
+
+  // ✅ Obtener el rol del usuario al cargar el modal
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const userData = await getUserData();
+        setUserRole(userData.role); // Asigna el rol del usuario
+      } catch (error) {
+        console.error("❌ Error obteniendo el rol del usuario:", error);
+      }
+    };
+
+    if (isAuthenticated) fetchUserRole();
+  }, [isAuthenticated]); 
 
   const handleSelectSection = (section) => {
     setSelectedSection(section);
@@ -81,16 +93,13 @@ const EventModal = ({ eventId, onClose, onTriggerLogin }) => {  // ✅ Se recibe
   return (
     <div className="event-modal-overlay" onClick={onClose}>
       <div className="event-modal-container" onClick={(e) => e.stopPropagation()}>
-
         {/* 🔹 Sección Izquierda - Mapa del evento */}
         <div className="event-modal-map-area">
-        <div className="event-modal-map-area">
-  <img
-    src={getMapSrc(event.venue.id)}
-    alt="Mapa del evento"
-    className="event-modal-map"
-  />
-</div>
+          <img
+            src={getMapSrc(event.venue.id)}
+            alt="Mapa del evento"
+            className="event-modal-map"
+          />
         </div>
 
         {/* 🔹 Sección Derecha - Contenido Principal */}
@@ -160,14 +169,19 @@ const EventModal = ({ eventId, onClose, onTriggerLogin }) => {  // ✅ Se recibe
                 <h3 className="event-modal-total-price">Total: ${calculateTotal().toLocaleString()}</h3>
               )}
 
-              {/* 🔹 Botón de compra con login si no está autenticado */}
-              <button
-                className="event-modal-purchase-button"
-                onClick={isAuthenticated ? handlePurchase : onTriggerLogin} // ✅ Ahora sí abre el login
-              >
-                {!isAuthenticated ? "Inicia sesión para comprar" : "Comprar"}
-              </button>
-
+              {/* 🔹 Botón de compra con login si no está autenticado y bloqueo para ADMIN */}
+              {userRole === "ADMIN" ? (
+                <button className="event-modal-purchase-button disabled" disabled>
+                  Los administradores no pueden comprar tickets
+                </button>
+              ) : (
+                <button
+                  className="event-modal-purchase-button"
+                  onClick={isAuthenticated ? handlePurchase : onTriggerLogin}
+                >
+                  {!isAuthenticated ? "Inicia sesión para comprar" : "Comprar"}
+                </button>
+              )}
             </>
           )}
         </div>

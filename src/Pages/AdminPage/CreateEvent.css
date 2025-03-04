@@ -1,0 +1,166 @@
+/* 📌 Contenedor Principal */
+.admin-create-event-container {
+    background-color: #0a0a0a;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(128, 0, 255, 0.3);
+    max-width: 700px;
+    margin: auto;
+  }
+  
+  /* 📌 Título */
+  .admin-create-event-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ff6b00;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* 📌 Subtítulos */
+  .admin-create-event-subtitle {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #8000ff;
+    margin-top: 2rem;
+  }
+  
+  /* 📌 Formulario */
+  .admin-create-event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+  
+  /* 📌 Etiquetas */
+  .admin-create-event-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #8000ff;
+  }
+  
+  /* 📌 Inputs, Select y Textarea */
+  .admin-create-event-input,
+  .admin-create-event-select,
+  .admin-create-event-textarea {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(122, 122, 122, 0.24);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .admin-create-event-select option{
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  .admin-create-event-textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  .admin-create-event-input:focus,
+  .admin-create-event-select:focus,
+  .admin-create-event-textarea:focus {
+    outline: none;
+    border-color: #8000ff;
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+  }
+  
+  .admin-create-event-input:hover,
+  .admin-create-event-select:hover,
+  .admin-create-event-textarea:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* 📌 Lista de Secciones */
+  .admin-create-event-section-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .admin-create-event-section-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  
+  /* 📌 Inputs para Precio y Cantidad */
+  .admin-create-event-price-input,
+  .admin-create-event-quantity-input {
+    width: 100px;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    margin: 0 4px;
+  }
+  
+  .admin-create-event-price-input:focus,
+  .admin-create-event-quantity-input:focus {
+    border-color: #ff6b00;
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+  }
+  
+  /* 📌 Botón Crear Evento */
+  .admin-create-event-button {
+    background: linear-gradient(45deg, #8000ff, #ff6b00);
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .admin-create-event-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+  
+  /* 📌 Diseño Responsivo */
+  @media (max-width: 768px) {
+    .admin-create-event-container {
+      padding: 1.5rem;
+    }
+  
+    .admin-create-event-form {
+      padding: 1.5rem;
+    }
+  
+    .admin-create-event-title {
+      font-size: 1.8rem;
+    }
+  
+    .admin-create-event-button {
+      font-size: 0.9rem;
+      padding: 0.8rem;
+    }
+  
+    .admin-create-event-price-input,
+    .admin-create-event-quantity-input {
+      width: 80px;
+    }
+  }
+  

@@ -1,0 +1,113 @@
+/* 📌 Contenedor Principal */
+.admin-edit-event-container {
+    background-color: #0a0a0a;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(128, 0, 255, 0.3);
+    max-width: 700px;
+    margin: auto;
+  }
+  
+  /* 📌 Título */
+  .admin-edit-event-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ff6b00;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* 📌 Formulario */
+  .admin-edit-event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+  
+  /* 📌 Etiquetas */
+  .admin-edit-event-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #8000ff;
+  }
+  
+  /* 📌 Inputs, Select y Textarea */
+  .admin-edit-event-input,
+  .admin-edit-event-select,
+  .admin-edit-event-textarea {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(122, 122, 122, 0.24);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .admin-edit-event-select option{
+    background-color: #ffffff;
+    color: #333;
+  }
+
+
+  .admin-edit-event-textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  .admin-edit-event-input:focus,
+  .admin-edit-event-select:focus,
+  .admin-edit-event-textarea:focus {
+    outline: none;
+    border-color: #8000ff;
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+  }
+  
+  .admin-edit-event-input:hover,
+  .admin-edit-event-select:hover,
+  .admin-edit-event-textarea:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* 📌 Botón Guardar Cambios */
+  .admin-edit-event-button {
+    background: linear-gradient(45deg, #8000ff, #ff6b00);
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .admin-edit-event-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+  
+  /* 📌 Diseño Responsivo */
+  @media (max-width: 768px) {
+    .admin-edit-event-container {
+      padding: 1.5rem;
+    }
+  
+    .admin-edit-event-form {
+      padding: 1.5rem;
+    }
+  
+    .admin-edit-event-title {
+      font-size: 1.8rem;
+    }
+  
+    .admin-edit-event-button {
+      font-size: 0.9rem;
+      padding: 0.8rem;
+    }
+  }
+  

@@ -1,0 +1,161 @@
+/* 📌 Contenedor Principal */
+.admin-create-venue-container {
+    background-color: #0a0a0a;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(128, 0, 255, 0.3);
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  /* 📌 Título */
+  .admin-create-venue-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ff6b00;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* 📌 Formulario */
+  .admin-create-venue-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+  
+  /* 📌 Etiquetas de los campos */
+  .admin-create-venue-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #8000ff;
+  }
+  
+  /* 📌 Inputs */
+  .admin-create-venue-input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(122, 122, 122, 0.24);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .admin-create-venue-input:focus {
+    outline: none;
+    border-color: #8000ff;
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+  }
+  
+  .admin-create-venue-input:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* 📌 Sección de Selección de Tipos de Sección */
+  .admin-create-venue-section-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .admin-create-venue-section-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: white;
+  }
+  
+  .admin-create-venue-section-item input {
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+  
+  /* 📌 Botón para Agregar Nueva Sección */
+  .admin-create-venue-add-section {
+    background: none;
+    color: #ff6b00;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .admin-create-venue-add-section:hover {
+    color: #8000ff;
+    transform: scale(1.05);
+  }
+  
+  /* 📌 Contenedor de Nueva Sección */
+  .admin-create-venue-new-section {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .admin-create-venue-create-section {
+    background: linear-gradient(45deg, #8000ff, #ff6b00);
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .admin-create-venue-create-section:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  
+  /* 📌 Botón para Crear el Recinto */
+  .admin-create-venue-button {
+    background: linear-gradient(45deg, #8000ff, #ff6b00);
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .admin-create-venue-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+  
+  /* 📌 Diseño Responsivo */
+  @media (max-width: 768px) {
+    .admin-create-venue-container {
+      padding: 1.5rem;
+    }
+  
+    .admin-create-venue-form {
+      padding: 1.5rem;
+    }
+  
+    .admin-create-venue-title {
+      font-size: 1.8rem;
+    }
+  
+    .admin-create-venue-button,
+    .admin-create-venue-create-section {
+      font-size: 0.9rem;
+      padding: 0.8rem;
+    }
+  }
+  

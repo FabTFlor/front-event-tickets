@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
 import EventsGrid from "./components/EventsGrid/EventsGrid";
 import EventsPage from "./Pages/EventPage/EventsPage";
+import ProfilePage from "./Pages/UserProfilePage/UserProfilePage";
+import AdminPage from "./Pages/AdminPage/AdminPage"; // ✅ Importar la nueva sección
 import CustomCursor from "./components/CustomCursor/CustomCursor";
 import LoginForm from "./components/Auth/LoginForm";
 import EventModal from "./components/EventModal/EventModal";
-import ProfilePage from "./Pages/UserProfilePage/UserProfilePage";
 import "./App.css";
 
 const PrivateRoute = ({ children, onTriggerLogin }) => {
   const isAuthenticated = !!localStorage.getItem("access_token");
 
   if (!isAuthenticated) {
-    onTriggerLogin(); // 🔹 En lugar de redirigir, abrimos el modal de login
+    onTriggerLogin();
     return null;
   }
 
@@ -60,6 +61,15 @@ function App() {
             </PrivateRoute>
           }
         />
+        {/* ✅ Nueva Ruta para Administración */}
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute onTriggerLogin={openLogin}>
+              <AdminPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
 
       {/* 🔹 Modal de Inicio de Sesión */}
@@ -84,7 +94,7 @@ function App() {
             <EventModal
               eventId={selectedEventId}
               onClose={closeEventModal}
-              onTriggerLogin={openLogin} // ✅ Ahora `EventModal` puede abrir el login si el usuario no está autenticado
+              onTriggerLogin={openLogin}
             />
           </div>
         </div>
